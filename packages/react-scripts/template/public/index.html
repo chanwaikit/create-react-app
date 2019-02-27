@@ -1,18 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta name="theme-color" content="#000000" />
+<!doctype html>
+<html data-scale="true" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- 设置移动端视图 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no,user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <!-- 删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <!-- 设置状态栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -22,20 +27,194 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <title>加载中...</title>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=cn6GFYRfp336vbbQqrOuAyGhvYlvFIir"></script>
+
+
+    <style>
+        :root{
+          --bgColor:#000;
+        }
+
+        body {
+          background-color: #f8f8f8 !important
+        }
+        #eh-loading .am-toast {
+          position: fixed;
+          width: 100%;
+          z-index: 1000;
+          font-size: 0.28rem;
+          text-align: center;
+        }
+        #eh-loading .am-toast > span {
+          max-width: 50%;
+        }
+        #eh-loading .am-toast.am-toast-mask {
+          height: 100%;
+          display: -webkit-box;
+          display: -webkit-flex;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-pack: center;
+          -webkit-justify-content: center;
+              -ms-flex-pack: center;
+                  justify-content: center;
+          -webkit-box-align: center;
+          -webkit-align-items: center;
+              -ms-flex-align: center;
+                  align-items: center;
+          left: 0;
+          top: 0;
+          -webkit-transform: translateZ(1px);
+                  transform: translateZ(1px);
+        }
+        #eh-loading .am-toast.am-toast-nomask {
+          position: fixed;
+          max-width: 50%;
+          width: auto;
+          left: 50%;
+          top: 50%;
+          -webkit-transform: translateZ(1px);
+                  transform: translateZ(1px);
+        }
+        #eh-loading .am-toast.am-toast-nomask .am-toast-notice {
+          -webkit-transform: translateX(-50%) translateY(-50%);
+              -ms-transform: translateX(-50%) translateY(-50%);
+                  transform: translateX(-50%) translateY(-50%);
+        }
+        #eh-loading .am-toast-notice-content .am-toast-text {
+          min-width: 1.2rem;
+          border-radius: 0.06rem;
+          color: #fff;
+          background-color: rgba(58, 58, 58, 0.9);
+          line-height: 1.5;
+          padding: 0.18rem 0.3rem;
+        }
+        #eh-loading .am-toast-notice-content .am-toast-text.am-toast-text-icon {
+          border-radius: 0.1rem;
+          padding: 0.3rem 0.3rem;
+        }
+        #eh-loading .am-toast-notice-content .am-toast-text.am-toast-text-icon .am-toast-text-info {
+          margin-top: 0.12rem;
+          font-size: 0.22rem !important;
+        }
+        #eh-loading .am-icon-lg {
+          width: 1.5rem !important;
+          height: 0.6rem !important;
+        }
+        #eh-loading .am-icon-loading {
+          -webkit-animation: cirle-anim 1s linear infinite;
+                  animation: cirle-anim 1s linear infinite;
+        }
+        @-webkit-keyframes cirle-anim {
+          100% {
+            -webkit-transform: rotate(360deg);
+                    transform: rotate(360deg);
+          }
+        }
+        @keyframes cirle-anim {
+          100% {
+            -webkit-transform: rotate(360deg);
+                    transform: rotate(360deg);
+          }
+        }
+    </style>
+    <script>
+     window.removeLoading = function() {
+            if (document.getElementById('eh-loading') !== null) {
+                document.body.removeChild(document.getElementById('eh-loading'))
+            }
+        }
+    </script>
+    <script>
+        function iScrollClick() {
+            if (/iPhone|iPad|iPod|Macintosh/i.test(navigator.userAgent)) return false;
+            if (/Chrome/i.test(navigator.userAgent)) return (/Android/i.test(navigator.userAgent));
+            if (/Silk/i.test(navigator.userAgent)) return false;
+            if (/Android/i.test(navigator.userAgent)) {
+                var s = navigator.userAgent.substr(navigator.userAgent.indexOf('Android') + 8, 3);
+                return parseFloat(s[0] + s[3]) < 44 ? false : true
+            }
+        }
+    </script>
+    <script>
+        ! function(e) {
+            function t(a) {
+                if (i[a]) return i[a].exports;
+                var n = i[a] = {
+                    exports: {},
+                    id: a,
+                    loaded: !1
+                };
+                return e[a].call(n.exports, n, n.exports, t), n.loaded = !0, n.exports
+            }
+
+            var i = {};
+            return t.m = e, t.c = i, t.p = "", t(0)
+        }([function(e, t) {
+            "use strict";
+            Object.defineProperty(t, "__esModule", {
+                value: !0
+            });
+            var i = window;
+            t["default"] = i.flex = function(normal, e, t) {
+                    var a = e || 100,
+                        n = t || 1,
+                        r = i.document,
+                        o = navigator.userAgent,
+                        d = o.match(/Android[\S\s]+AppleWebkit\/(\d{3})/i),
+                        l = o.match(/U3\/((\d+|\.){5,})/i),
+                        c = l && parseInt(l[1].split(".").join(""), 10) >= 80,
+                        p = navigator.appVersion.match(/(iphone|ipad|ipod)/gi),
+                        s = i.devicePixelRatio || 1;
+                    p || d && d[1] > 534 || c || (s = 1);
+                    var u = normal ? 1 : 1 / s,
+                        m = r.querySelector('meta[name="viewport"]');
+                    m || (m = r.createElement("meta"), m.setAttribute("name", "viewport"), r.head.appendChild(m)),
+                        m.setAttribute("content", "width=device-width,user-scalable=no,initial-scale=" + u + ",maximum-scale=" + u + ",minimum-scale=" + u),
+                        r.documentElement.style.fontSize = normal ? "50px" : a / 2 * s * n + "px"
+
+                },
+                e.exports = t["default"]
+        }]);
+        flex(false, 100, 1);
+    </script>
+
+
+
+
+</head>
+
+<body>
+    <noscript>
+  You need to enable JavaScript to run this app.
+</noscript>
+    <div id="eh-loading">
+      <div class="am-toast am-toast-mask">
+        <div class="am-toast-notice am-toast-notice-closable"><div class="am-toast-notice-content"><div class="am-toast-text am-toast-text-icon" role="alert" aria-live="assertive">
+          <svg class="am-icon am-icon-loading am-icon-lg" viewBox="0 -2 59.75 60.25"><path fill="#ccc" d="M29.69-.527C14.044-.527 1.36 12.158 1.36 27.806S14.043 56.14 29.69 56.14c15.65 0 28.334-12.686 28.334-28.334S45.34-.527 29.69-.527zm.185 53.75c-14.037 0-25.417-11.38-25.417-25.417S15.838 2.39 29.875 2.39s25.417 11.38 25.417 25.417-11.38 25.416-25.417 25.416z"/><path fill="none" stroke="#108ee9" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" d="M56.587 29.766c.37-7.438-1.658-14.7-6.393-19.552"/></svg>
+          <div class="am-toast-text-info">加载中...</div></div></div><a tabindex="0" class="am-toast-notice-close"><span class="am-toast-notice-close-x"></span></a></div>
+      </div>
+    </div>
     <div id="root"></div>
     <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    This HTML file is a template.
+    If you open it directly in the browser, you will see an empty page.
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+    You can add webfonts, meta tags, or analytics to this file.
+    The build step will place the bundled scripts into the <body> tag.
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+    To begin the development, run `npm start` or `yarn start`.
+    To create a production bundle, use `npm run build` or `yarn build`.
+  -->
+    <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="https://fe-cdn.zuolin.com/react/15.6.1/react.min.js"></script>
+    <script src="https://fe-cdn.zuolin.com/react/15.6.1/react-dom.min.js"></script>
+    <script src="https://fe-cdn.zuolin.com/fastclick/1.0.6/fastclick.js"></script>
+    <script src="https://fe-cdn.zuolin.com/moment.js/2.20.0/moment.min.js"></script>
+    <script src="https://fe-cdn.zuolin.com/moment.js/2.20.1/locale/zh-cn.js"></script>
+    <script src="https://fe-cdn.zuolin.com/react-router-dom/4.1.2/react-router-dom.min.js"></script>
+
+</body>
+
 </html>
